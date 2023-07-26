@@ -37,18 +37,17 @@ public class MessageController {
     return ResponseEntity.ok("Message sent to RabbitMQ ...");
   }
 
-  @Scheduled(fixedDelay = 5000)
-  public void tick() throws Exception {
-    send("Produced");
-  }
-
-  @MessageMapping("/socket")
-  @SendTo("/topic/messages")
-  public void send(String message) throws Exception {
-    System.out.println("Sending");
-    simpMessagingTemplate.convertAndSend("/topic/messages", message + counter);
-    counter++;
-//    return message;
-  }
+//  @Scheduled(fixedDelay = 5000)
+//  public void tick() throws Exception {
+//    send("Produced");
+//  }
+//
+//  @MessageMapping("/socket")
+//  @SendTo("/topic/messages")
+//  public void send(String message) throws Exception {
+//    System.out.println("Sending");
+//    simpMessagingTemplate.convertAndSend("/topic/messages", message + counter);
+//    counter++;
+//  }
 
 }

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,9 @@ public class RabbitProducer {
 
   private Integer counter = 0;
 
+  @Autowired
+  private SimpMessagingTemplate simpMessagingTemplate;
+
   private static final Logger LOGGER = LoggerFactory.getLogger(RabbitProducer.class);
 
   private RabbitTemplate rabbitTemplate;
@@ -37,18 +41,17 @@ public class RabbitProducer {
     rabbitTemplate.convertAndSend(exchange, routingKey, message);
   }
 
-//  @Scheduled(fixedDelay = 5000)
+  @Scheduled(fixedDelay = 5000)
   public void tick() throws Exception {
     sendMessage("Message from schedule " + counter);
-    counter++;
-//    send("Produced");
+    send("Produced");
   }
 
-//  @MessageMapping("/chat")
-//  @SendTo("/topic/messages")
-//  public String send(@Payload String message) throws Exception {
-//    System.out.println("Message sent");
-//    return message;
-//  }
+  @MessageMapping("/chat")
+  public void send(@Payload String message) throws Exception {
+    System.out.println("Message sent to client");
+    simpMessagingTemplate.convertAndSend("/topic/messages", message);
+    counter++;
+  }
 
 }
