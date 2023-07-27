@@ -24,12 +24,12 @@ public class RabbitConsumer {
     LOGGER.info(String.format("Received message -> %s", message + " from consumer 1"));
   }
 
-//  @RabbitListener(queues = {"${rabbitmq.queue.name}"})
-//  public void consume2(String message) throws Exception {
-//    send("Received");
-//    try { Thread.sleep(3000);} catch (InterruptedException ignored) {}
-//    LOGGER.info(String.format("Received message -> %s", message + " from consumer 2"));
-//  }
+  @RabbitListener(queues = {"${rabbitmq.queue.name}"})
+  public void consume2(String message) throws Exception {
+    send("Received");
+    try { Thread.sleep(3000);} catch (InterruptedException ignored) {}
+    LOGGER.info(String.format("Received message -> %s", message + " from consumer 2"));
+  }
 
   @MessageMapping("/chat")
   public void send(@Payload String message) throws Exception {
