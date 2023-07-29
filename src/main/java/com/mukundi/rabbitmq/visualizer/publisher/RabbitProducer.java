@@ -1,6 +1,7 @@
 package com.mukundi.rabbitmq.visualizer.publisher;
 
 import com.mukundi.rabbitmq.visualizer.controller.MessageController;
+import com.mukundi.rabbitmq.visualizer.dto.Order;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Message;
@@ -13,6 +14,9 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+
+import java.util.Objects;
+import java.util.UUID;
 
 @Service
 public class RabbitProducer {
@@ -36,21 +40,23 @@ public class RabbitProducer {
     this.rabbitTemplate = rabbitTemplate;
   }
 
-  public void sendMessage(String message){
-    LOGGER.info(String.format("Message sent -> %s", message));
-    rabbitTemplate.convertAndSend(exchange, routingKey, message);
-  }
 
   @Scheduled(fixedDelay = 5000)
   public void tick() throws Exception {
-    sendMessage("Message from schedule " + counter);
-    send("Produced");
+    Order order = new Order(UUID.randomUUID(), "Product", 23.00);
+    sendMessage(order);
+    send(order);
+  }
+
+  public void sendMessage(Object o){
+    LOGGER.info(String.format("Message sent -> %s", o));
+    rabbitTemplate.convertAndSend(exchange, routingKey, o);
   }
 
   @MessageMapping("/chat")
-  public void send(@Payload String message) throws Exception {
+  public void send(@Payload Order order) throws Exception {
     System.out.println("Message sent to client");
-    simpMessagingTemplate.convertAndSend("/topic/messages", message);
+    simpMessagingTemplate.convertAndSend("/topic/producer", order);
     counter++;
   }
 
