@@ -3,11 +3,7 @@ package com.mukundi.rabbitmq.visualizer.controller;
 import com.mukundi.rabbitmq.visualizer.publisher.RabbitProducer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.messaging.simp.annotation.SubscribeMapping;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -28,7 +24,7 @@ public class MessageController {
 
   @GetMapping("/publish")
   public ResponseEntity<String> sendMessage(@RequestParam("message") String message) {
-    producer.sendMessage(message);
+//    producer.sendToQueue(message);
 //    try {
 //      send("Produced");
 //    } catch (Exception e) {
