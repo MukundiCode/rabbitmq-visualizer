@@ -38,5 +38,3 @@ This project shows how to use rabbitmq as a message broker between a producer an
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE] file for details.
-
-How do you like this markdown file? Is there anything else I can help you with? 😊
